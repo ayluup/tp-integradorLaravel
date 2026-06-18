@@ -21,53 +21,58 @@
     {{-- FORMULARIO --}}
     <div class="card p-3 mb-4">
         <h4>Agregar equipo</h4>
+
         <form method="POST" action="{{ route('equipos.store') }}" enctype="multipart/form-data">
-    @csrf
+            @csrf
 
-    <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre del equipo">
-    <input type="text" name="numero_serie" class="form-control mb-2" placeholder="Número de serie">
-    <textarea name="descripcion" class="form-control mb-2" placeholder="Descripción"></textarea>
+            <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre del equipo" required>
 
-    
-    <input type="file" 
-           name="imagen" 
-           class="form-control mb-2" 
-           accept=".jpg,.jpeg,.png">
+            <input type="text" name="numero_serie" class="form-control mb-2" placeholder="Número de serie">
+            
+            <textarea name="descripcion" class="form-control mb-2" placeholder="Descripción"></textarea>
 
-    <button class="btn btn-primary">Guardar</button>
-</form>
-        
+            {{-- ✅ SELECT DE UBICACIÓN - SOLO EN EL FORMULARIO --}}
+            <select name="aula_id" class="form-select mb-2">
+                <option value="">-- Seleccionar ubicación --</option>
+                @foreach($aulas as $aula)
+                    <option value="{{ $aula->id }}">{{ $aula->nombre_sala }}</option>
+                @endforeach
+            </select>
+
+            <input type="file" name="imagen" class="form-control mb-2" accept=".jpg,.jpeg,.png">
+
+            <button class="btn btn-primary">Guardar</button>
+        </form>
     </div>
 
     {{-- LISTADO --}}
-<div class="card p-3">
-    <h4>Listado de equipos</h4>
+    <div class="card p-3">
+        <h4>Listado de equipos</h4>
 
-    @forelse($equipos as $equipo)
-        <div class="border rounded p-2 mb-2">
-            <strong>{{ $equipo->nombre }}</strong><br>
-            Serie: {{ $equipo->numero_serie }}<br>
-            {{ $equipo->descripcion }}<br>
+        @forelse($equipos as $equipo)
+            <div class="border rounded p-2 mb-2">
+                <strong>{{ $equipo->nombre }}</strong><br>
+                Serie: {{ $equipo->numero_serie }}<br>
+                {{ $equipo->descripcion }}<br>
+                
             
-            <strong>Ubicación:</strong> 
-            {{ $equipo->aula->nombre_sala ?? 'Sin asignar' }}<br>
+                Ubicación: {{ $equipo->aula ? $equipo->aula->nombre_sala : 'Sin ubicación' }}<br>
 
-            {{-- ✅ MOSTRAR IMAGEN --}}
-            @if($equipo->imagen_ruta)
-                <img src="{{ asset($equipo->imagen_ruta) }}" 
-                     width="150" 
-                     class="mt-2" 
-                     alt="Imagen del equipo">
-            @else
-                <span class="text-muted">Sin imagen</span>
-            @endif
-        </div>
-    @empty
-        <div class="alert alert-warning">
-            No hay equipos cargados.
-        </div>
-    @endforelse
-</div>
+                @if($equipo->imagen_ruta)
+                    <img src="{{ asset($equipo->imagen_ruta) }}" 
+                         width="150" 
+                         class="mt-2" 
+                         alt="Imagen del equipo">
+                @else
+                    <span class="text-muted">Sin imagen</span>
+                @endif
+            </div>
+        @empty
+            <div class="alert alert-warning">
+                No hay equipos cargados.
+            </div>
+        @endforelse
+    </div>
 
 </div>
 
