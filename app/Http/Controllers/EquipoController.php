@@ -33,7 +33,7 @@ class EquipoController extends Controller
         $equipo->descripcion = $request->descripcion;
         $equipo->aula_id = $request->aula_id;
 
-        // 🔥 GUARDAR IMAGEN
+        
         if ($request->hasFile('imagen')) {
             // Guarda en: storage/app/public/hardware/
             // Devuelve: "hardware/abc123.jpg"
